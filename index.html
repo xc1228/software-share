@@ -13,6 +13,9 @@
         .search { max-width: 500px; margin: 20px auto; padding: 0 20px; }
         .search input { width: 100%; padding: 12px 18px; font-size: 16px; border: 2px solid #ddd; border-radius: 25px; outline: none; }
         .search input:focus { border-color: #667eea; }
+        .cats { max-width: 700px; margin: 0 auto 20px; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+        .cat-btn { padding: 6px 16px; border: 2px solid #667eea; background: white; color: #667eea; border-radius: 20px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+        .cat-btn:hover, .cat-btn.active { background: #667eea; color: white; }
         .list { max-width: 900px; margin: 0 auto; padding: 0 20px 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
         .card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
         .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
@@ -33,28 +36,50 @@
     <div class="search">
         <input type="text" id="kw" placeholder="🔍 搜索软件...">
     </div>
+    <div class="cats" id="cats"></div>
     <div class="list" id="list"></div>
     <div class="footer">© 2026 软件分享站</div>
     <script>
         var data = [
-            { name: "7-Zip", desc: "免费压缩解压工具，纯净无广告。", tag: "系统工具", ver: "v24.08", size: "1.5 MB", link: "#" },
-            { name: "PotPlayer", desc: "万能视频播放器，解码能力超强。", tag: "影音播放", ver: "v240827", size: "35 MB", link: "#" },
-            { name: "Everything", desc: "极速文件搜索，秒级定位任意文件。", tag: "系统工具", ver: "v1.4.1", size: "1.8 MB", link: "#" },
-            { name: "Snipaste", desc: "截图+贴图工具，设计师程序员必备。", tag: "效率工具", ver: "v2.9", size: "15 MB", link: "#" },
-            { name: "VS Code", desc: "微软免费代码编辑器，开发者首选。", tag: "开发工具", ver: "v1.95", size: "85 MB", link: "#" },
-            { name: "OBS Studio", desc: "免费录屏直播软件，主播必备。", tag: "影音播放", ver: "v30.2", size: "120 MB", link: "#" }
+            { name: "南瓜影院", desc: "4.4版本", tag: "影音播放", ver: "4.4", size: "APK", link: "https://github.com/xc1228/software-share/raw/main/%E5%8D%97%E7%93%9C%E5%BD%B1%E9%99%A24.4.apk" },
+            { name: "大吉", desc: "1.5.11版本", tag: "影音播放", ver: "1.5.11", size: "APK", link: "https://github.com/xc1228/software-share/releases/download/v1.0/1.5.11.apk" }
         ];
+
+        var cats = [...new Set(data.map(function(s) { return s.tag; }))];
+        var html = '<button class="cat-btn active" data-cat="all">全部</button>';
+        cats.forEach(function(c) { html += '<button class="cat-btn" data-cat="' + c + '">' + c + '</button>'; });
+        document.getElementById("cats").innerHTML = html;
+
+        var currentCat = "all";
+
+        document.querySelectorAll(".cat-btn").forEach(function(btn) {
+            btn.onclick = function() {
+                document.querySelectorAll(".cat-btn").forEach(function(b) { b.classList.remove("active"); });
+                this.classList.add("active");
+                currentCat = this.dataset.cat;
+                filter();
+            };
+        });
+
+        function filter() {
+            var w = document.getElementById("kw").value.toLowerCase();
+            var result = data.filter(function(s) {
+                var matchCat = currentCat === "all" || s.tag === currentCat;
+                var matchKw = s.name.toLowerCase().indexOf(w) >= 0 || s.desc.toLowerCase().indexOf(w) >= 0;
+                return matchCat && matchKw;
+            });
+            show(result);
+        }
+
         function show(list) {
             var html = "";
             list.forEach(function(s) {
-                html += '<div class="card"><h3>' + s.name + '</h3><span class="tag">' + s.tag + '</span><div class="desc">' + s.desc + '</div><div class="meta">' + s.ver + ' | ' + s.size + '</div><a href="' + s.link + '" download class="btn">⬇ 下载</a></div>';
+                html += '<div class="card"><h3>' + s.name + '</h3><span class="tag">' + s.tag + '</span><div class="desc">' + s.desc + '</div><div class="meta">' + s.ver + ' | ' + s.size + '</div><a href="' + s.link + '" target="_blank" class="btn">⬇ 下载</a></div>';
             });
             document.getElementById("list").innerHTML = html;
         }
-        document.getElementById("kw").oninput = function() {
-            var w = this.value.toLowerCase();
-            show(data.filter(function(s) { return s.name.toLowerCase().indexOf(w) >= 0 || s.desc.toLowerCase().indexOf(w) >= 0; }));
-        };
+
+        document.getElementById("kw").oninput = filter;
         show(data);
     </script>
 </body>
