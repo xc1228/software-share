@@ -45,10 +45,10 @@
         .card .icon-wrap { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 14px; background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(253,121,168,0.2)); }
         .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; word-break: break-all; }
         .card .tag-row { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-        .card .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; background: rgba(108,92,231,0.15); color: var(--accent2); letter-spacing: 0.5px; }
+        .card .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; background: rgba(108,92,231,0.15); color: var(--accent2); }
         .card .size { font-size: 13px; color: var(--sub); margin-bottom: 16px; display: flex; align-items: center; gap: 4px; }
         .card .size .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-        .card .btn { margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px; background: var(--gradient); color: #fff; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; transition: all 0.3s; }
+        .card .btn { margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px; background: var(--gradient); color: #fff; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 14px; transition: all 0.3s; }
         .card .btn:hover { box-shadow: 0 8px 25px rgba(108,92,231,0.4); transform: scale(1.03); }
         .card .btn svg { width: 18px; height: 18px; }
         .loading { grid-column: 1/-1; text-align: center; padding: 80px 20px; }
@@ -100,11 +100,10 @@
         <p>© 2026 软件分享站 · Powered by <a href="https://github.com/xc1228/software-share" target="_blank">GitHub</a></p>
     </footer>
 
-    <!-- 🎵 音乐播放器 -->
     <audio id="bgm" loop src="https://github.com/xc1228/software-share/raw/main/bgm.mp3"></audio>
     <button class="music-btn" id="musicBtn" title="背景音乐">🎵</button>
-
     <button class="back-top" id="backTop" title="回到顶部">↑</button>
+
     <script>
         (function() {
             var c = document.getElementById('particles');
@@ -165,13 +164,12 @@
         };
         clearBtn.onclick = function() { kw.value = ''; clearBtn.classList.remove('show'); render(allData); kw.focus(); };
 
-        // 🎵 音乐控制
         var bgm = document.getElementById('bgm');
         var musicBtn = document.getElementById('musicBtn');
         var playing = false;
         musicBtn.onclick = function() {
             if (playing) { bgm.pause(); musicBtn.classList.remove('playing'); musicBtn.textContent = '🎵'; }
-            else { bgm.play().then(function() { musicBtn.classList.add('playing'); musicBtn.textContent = '🎶'; }).catch(function() { alert('浏览器限制自动播放，请先点击页面任意位置再试'); }); }
+            else { bgm.play().then(function() { musicBtn.classList.add('playing'); musicBtn.textContent = '🎶'; }).catch(function() { alert('请先点击页面任意位置，再点击播放'); }); }
             playing = !playing;
         };
 
