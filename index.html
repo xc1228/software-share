@@ -32,13 +32,13 @@
         .search-box .icon { font-size: 20px; margin-right: 10px; opacity: 0.5; }
         .search-box input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 16px; padding: 12px 0; }
         .search-box input::placeholder { color: #555; }
-        .search-box .clear { background: none; border: none; color: var(--sub); cursor: pointer; font-size: 20px; padding: 8px 12px; display: none; border-radius: 50%; transition: all 0.2s; }
+        .search-box .clear { background: none; border: none; color: var(--sub); cursor: pointer; font-size: 20px; padding: 8px 12px; display: none; border-radius: 50%; }
         .search-box .clear:hover { color: #ff6b6b; background: rgba(255,107,107,0.1); }
         .search-box .clear.show { display: block; }
         .stats { position: relative; z-index: 1; text-align: center; margin-bottom: 24px; }
         .stats span { display: inline-block; padding: 6px 18px; background: var(--card); border-radius: 20px; font-size: 13px; color: var(--accent2); border: 1px solid var(--border); }
         .grid { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px 20px 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; cursor: default; display: flex; flex-direction: column; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px 20px 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; display: flex; flex-direction: column; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient); opacity: 0; transition: opacity 0.35s; }
         .card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 50px rgba(108,92,231,0.2); }
         .card:hover::before { opacity: 1; }
@@ -99,8 +99,11 @@
     <footer class="footer">
         <p>© 2026 软件分享站 · Powered by <a href="https://github.com/xc1228/software-share" target="_blank">GitHub</a></p>
     </footer>
-    <audio id="bgm" loop preload="auto" src="https://github.com/xc1228/software-share/raw/main/bgm.mp3"></audio>
+
+    <!-- 🎵 音乐播放器 -->
+    <audio id="bgm" loop src="https://github.com/xc1228/software-share/raw/main/bgm.mp3"></audio>
     <button class="music-btn" id="musicBtn" title="背景音乐">🎵</button>
+
     <button class="back-top" id="backTop" title="回到顶部">↑</button>
     <script>
         (function() {
@@ -161,14 +164,17 @@
             render(result);
         };
         clearBtn.onclick = function() { kw.value = ''; clearBtn.classList.remove('show'); render(allData); kw.focus(); };
+
+        // 🎵 音乐控制
         var bgm = document.getElementById('bgm');
         var musicBtn = document.getElementById('musicBtn');
         var playing = false;
         musicBtn.onclick = function() {
             if (playing) { bgm.pause(); musicBtn.classList.remove('playing'); musicBtn.textContent = '🎵'; }
-            else { bgm.play().then(function() { musicBtn.classList.add('playing'); musicBtn.textContent = '🎶'; }).catch(function() { alert('请先点击页面任意位置，再点播放'); }); }
+            else { bgm.play().then(function() { musicBtn.classList.add('playing'); musicBtn.textContent = '🎶'; }).catch(function() { alert('浏览器限制自动播放，请先点击页面任意位置再试'); }); }
             playing = !playing;
         };
+
         var backTop = document.getElementById('backTop');
         window.onscroll = function() { backTop.classList.toggle('show', window.scrollY > 400); };
         backTop.onclick = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); };
